@@ -73,12 +73,17 @@ function App() {
         invoke("fetch_compound", { 'inchi': currentInchi }).then((data: any) => {
             let parsed: PubchemData = JSON.parse(data);
             /* console.log(parsed) */
-            if ((parsed.name === "Does not exist") && (currentName !== "")) {
+            if ((!parsed.synonyms.includes(currentInchi)) && (currentInchi !== "")){
                 parsed.synonyms.push(currentInchi);
+            }
+            if ((!parsed.synonyms.includes(currentName)) && (currentName !== "")){
                 parsed.synonyms.push(currentName);
             }
+            if ((!parsed.synonyms.includes(parsed.name)) && (parsed.name !== "Does not exist")) {
+                parsed.synonyms.push(parsed.name);
+            }
             setPubchemCompound(parsed);
-        })
+        });
     }
 
     const get_cleaned_data = () => {
